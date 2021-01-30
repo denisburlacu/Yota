@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Yota
+namespace Yota.Tests
 {
     public class Class1
     {
