@@ -23,7 +23,7 @@ namespace Yota.Tests.Guard
             Test = int.MaxValue
         }
 
-        private class InvalidMaxLength : IHandler<IInvalidYota, InvalidYotaEnum>, IInvalidYota
+        private class InvalidMaxLength : IYotaEntity<IInvalidYota, InvalidYotaEnum>, IInvalidYota
         {
             public byte Yota { get; set; }
         }

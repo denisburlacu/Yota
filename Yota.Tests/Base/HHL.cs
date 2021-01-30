@@ -16,7 +16,7 @@ namespace Yota.Tests.Base
         [TestCaseSource(nameof(LocationTestData))]
         public static void CheckFlag(TestEnum[] bitsToSet)
         {
-            var handler = new TestHandler();
+            var handler = new TestYotaEntity();
             foreach (var testEnum in bitsToSet)
             {
                 YotaHelper.SetFlag(handler, testEnum);
@@ -28,7 +28,7 @@ namespace Yota.Tests.Base
 
             foreach (var @enum in enumerable)
             {
-                var expression = ExpressionGenerator.HasFlagExpression<TestHandler, ITestYota, TestEnum>(@enum);
+                var expression = ExpressionGenerator.HasFlagExpression<TestYotaEntity, ITestYota, TestEnum>(@enum);
                 var actual = expression.Compile()(handler);
                 var expected = bitsToSet.Any(s => s == @enum);
                 Assert.AreEqual(expected, actual);

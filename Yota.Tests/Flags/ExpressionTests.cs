@@ -14,7 +14,7 @@ namespace Yota.Tests.Flags
         [TestCaseSource(nameof(LocationTestData))]
         public static void CheckBitsSetCorrectly(TestEnum[] bitsToSet)
         {
-            var handler = new TestHandler();
+            var handler = new TestYotaEntity();
             foreach (var testEnum in bitsToSet)
             {
                 YotaHelper.SetFlag(handler, testEnum);
@@ -39,7 +39,7 @@ namespace Yota.Tests.Flags
         [TestCaseSource(nameof(LocationTestData))]
         public static void CheckFlagIsRemoved(TestEnum[] bitsToSet)
         {
-            var handler = new TestHandler();
+            var handler = new TestYotaEntity();
             foreach (var testEnum in bitsToSet)
             {
                 YotaHelper.SetFlag(handler, testEnum);
@@ -65,7 +65,7 @@ namespace Yota.Tests.Flags
         [TestCaseSource(nameof(LocationTestData))]
         public static void CheckFlag(TestEnum[] bitsToSet)
         {
-            var handler = new TestHandler();
+            var handler = new TestYotaEntity();
             foreach (var testEnum in bitsToSet)
             {
                 YotaHelper.SetFlag(handler, testEnum);

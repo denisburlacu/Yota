@@ -8,7 +8,7 @@ namespace Yota.Expressions
     public static class ExpressionGenerator
     {
         public static Expression<Func<TEntity, bool>> HasFlagExpression<TEntity, TYota, TEnum>(TEnum @enum)
-            where TEntity : IHandler<TYota, TEnum>
+            where TEntity : IYotaEntity<TYota, TEnum>
             where TYota : IBaseYota
         {
             var (propertyInfo, position) = PropertyHelper.GetProperty<TYota, TEnum>(@enum);

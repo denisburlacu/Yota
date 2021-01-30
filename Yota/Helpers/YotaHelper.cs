@@ -5,27 +5,27 @@ namespace Yota.Helpers
 {
     public static class YotaHelper
     {
-        public static void RemoveFlag<TYota, TEnum>(IHandler<TYota, TEnum> handler, TEnum tEnum)
+        public static void RemoveFlag<TYota, TEnum>(IYotaEntity<TYota, TEnum> yotaEntity, TEnum tEnum)
             where TYota : IBaseYota
             where TEnum : struct
         {
-            SetFlag(handler, tEnum, false);
+            SetFlag(yotaEntity, tEnum, false);
         }
 
-        public static void SetFlag<TYota, TEnum>(IHandler<TYota, TEnum> handler, TEnum tEnum)
+        public static void SetFlag<TYota, TEnum>(IYotaEntity<TYota, TEnum> yotaEntity, TEnum tEnum)
             where TYota : IBaseYota
             where TEnum : struct
         {
-            SetFlag(handler, tEnum, true);
+            SetFlag(yotaEntity, tEnum, true);
         }
 
-        public static bool ContainsFlag<TYota, TEnum>(IHandler<TYota, TEnum> handler, TEnum tEnum)
+        public static bool ContainsFlag<TYota, TEnum>(IYotaEntity<TYota, TEnum> yotaEntity, TEnum tEnum)
             where TYota : IBaseYota
             where TEnum : struct
         {
             var (propertyInfo, position) = PropertyHelper.GetProperty<TYota, TEnum>(tEnum);
 
-            var currentValue = propertyInfo.GetValue(handler);
+            var currentValue = propertyInfo.GetValue(yotaEntity);
 
             if (currentValue != null)
             {
@@ -51,31 +51,31 @@ namespace Yota.Helpers
             throw new NullReferenceException($"Current value not found for property {propertyInfo.Name}");
         }
 
-        private static void SetFlag<TYota, TEnum>(IHandler<TYota, TEnum> handler, TEnum tEnum, bool set)
+        private static void SetFlag<TYota, TEnum>(IYotaEntity<TYota, TEnum> yotaEntity, TEnum tEnum, bool set)
             where TYota : IBaseYota
             where TEnum : struct
         {
             var (propertyInfo, position) = PropertyHelper.GetProperty<TYota, TEnum>(tEnum);
 
-            var currentValue = propertyInfo.GetValue(handler);
+            var currentValue = propertyInfo.GetValue(yotaEntity);
             if (currentValue != null)
             {
                 //weird but fast
                 if (currentValue is byte @byte)
                 {
                     var newValue = set ? (@byte | 1 << position) : @byte & ~(1 << position);
-                    propertyInfo.SetValue(handler, (byte) newValue);
+                    propertyInfo.SetValue(yotaEntity, (byte) newValue);
                 }
                 else if (currentValue is int @int)
                 {
                     var newValue = set ? (@int | 1 << position) : @int & ~(1 << position);
-                    propertyInfo.SetValue(handler, newValue);
+                    propertyInfo.SetValue(yotaEntity, newValue);
                 }
 
                 else if (currentValue is long @long)
                 {
                     var newValue = set ? (@long | 1L << position) : @long & ~(1L << position);
-                    propertyInfo.SetValue(handler, newValue);
+                    propertyInfo.SetValue(yotaEntity, newValue);
                 }
                 else
                 {

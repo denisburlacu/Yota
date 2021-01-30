@@ -4,7 +4,7 @@ using Yota.Tests.Flags;
 
 namespace Yota.Tests.Base
 {
-    public class Entity : IHandler<ITestYota, TestEnum>
+    public class Entity : IYotaEntity<ITestYota, TestEnum>
     {
         [Key]
         public int Id { get; set; }
