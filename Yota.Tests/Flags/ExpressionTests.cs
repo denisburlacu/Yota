@@ -21,16 +21,16 @@ namespace Yota.Tests.Flags
             }
 
             AssertBits(handler.Flag1, sizeof(byte) * 8,
-                bitsToSet.Select(it => (int) it)
+                bitsToSet.Select(it => (int)it)
                     .ToArray());
 
             AssertBits(handler.Flag2, sizeof(int) * 8,
-                bitsToSet.Select(it => (int) it)
+                bitsToSet.Select(it => (int)it)
                     .Select(it => it - (sizeof(byte) * 8))
                     .Where(it => it >= 0).ToArray());
 
             AssertBits(handler.Flag3, sizeof(long) * 8,
-                bitsToSet.Select(it => (int) it)
+                bitsToSet.Select(it => (int)it)
                     .Select(it => it - (sizeof(byte) * 8) - (sizeof(int) * 8))
                     .Where(it => it >= 0).ToArray());
         }
@@ -50,15 +50,22 @@ namespace Yota.Tests.Flags
                 YotaHelper.RemoveFlag(handler, testEnum);
             }
 
-            var enumerable = Enumerable.Range(0, YotaGuard.GetMaxValue<ITestYota>())
-                .Select(it => (TestEnum) it)
-                .ToList();
+            AssertEmpty(handler, bitsToSet);
+        }
 
-            foreach (var @enum in enumerable)
+        [Test]
+        [TestCaseSource(nameof(LocationTestData))]
+        public static void CheckClearFlag(TestEnum[] bitsToSet)
+        {
+            var handler = new TestYotaEntity();
+            foreach (var testEnum in bitsToSet)
             {
-                var actual = YotaHelper.ContainsFlag(handler, @enum);
-                Assert.AreEqual(false, actual);
+                YotaHelper.SetFlag(handler, testEnum);
             }
+
+            YotaHelper.ClearFlags(handler);
+
+            AssertEmpty(handler, bitsToSet);
         }
 
         [Test]
@@ -72,7 +79,7 @@ namespace Yota.Tests.Flags
             }
 
             var enumerable = Enumerable.Range(0, YotaGuard.GetMaxValue<ITestYota>())
-                .Select(it => (TestEnum) it)
+                .Select(it => (TestEnum)it)
                 .ToList();
 
             foreach (var @enum in enumerable)
@@ -87,8 +94,8 @@ namespace Yota.Tests.Flags
         [Test]
         public static void Run()
         {
-            var bitsToSet = new[] {98, 92, 8, 61, 90, 99, 96, 42, 53};
-            CheckFlag(bitsToSet.Select(it => (TestEnum) it).ToArray());
+            var bitsToSet = new[] { 98, 92, 8, 61, 90, 99, 96, 42, 53 };
+            CheckFlag(bitsToSet.Select(it => (TestEnum)it).ToArray());
         }
 
         private static void AssertBits(long value, int numberOfBits, params int[] settedBits)
@@ -108,10 +115,23 @@ namespace Yota.Tests.Flags
             }
         }
 
+        private static void AssertEmpty(TestYotaEntity handler, TestEnum[] bitsToSet)
+        {
+            var enumerable = Enumerable.Range(0, YotaGuard.GetMaxValue<ITestYota>())
+                .Select(it => (TestEnum)it)
+                .ToList();
+
+            foreach (var @enum in enumerable)
+            {
+                var actual = YotaHelper.ContainsFlag(handler, @enum);
+                Assert.AreEqual(false, actual);
+            }
+        }
+
         private static bool[] ToBits(long input, int numberOfBits)
         {
             return Enumerable.Range(0, numberOfBits)
-                .Select(bitIndex => (long) (1L << bitIndex))
+                .Select(bitIndex => (long)(1L << bitIndex))
                 .Select(bitMask => (input & bitMask) != 0)
                 // .Select(it => IsBitSet(input, it))
                 .ToArray();
@@ -119,7 +139,7 @@ namespace Yota.Tests.Flags
 
         private static IEnumerable<TestCaseData> LocationTestData()
         {
-            var random = new Random((int) DateTime.UtcNow.Ticks);
+            var random = new Random((int)DateTime.UtcNow.Ticks);
 
             for (int i = 0; i < 1000; i++)
             {
@@ -131,14 +151,14 @@ namespace Yota.Tests.Flags
 
                 for (int j = 0; j < totalSet; j++)
                 {
-                    bitsToSet.Add((TestEnum) random.Next(0, totalBits));
+                    bitsToSet.Add((TestEnum)random.Next(0, totalBits));
                 }
 
                 var unOrdered = bitsToSet
                     .Distinct()
                     .OrderBy(x => random.Next()).ToArray();
 
-                yield return new TestCaseData(unOrdered).SetName(string.Join(",", bitsToSet.Select(it => (int) it)));
+                yield return new TestCaseData(unOrdered).SetName(string.Join(",", bitsToSet.Select(it => (int)it)));
             }
         }
     }
