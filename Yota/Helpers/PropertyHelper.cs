@@ -45,7 +45,7 @@ namespace Yota.Helpers
             try
             {
                 var newProps = GetPropertiesIntern<TYota>();
-                Map.Add(type, newProps);
+                Map[type] = newProps;
                 return newProps;
             }
             finally
